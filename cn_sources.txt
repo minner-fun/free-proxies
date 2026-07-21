@@ -1,0 +1,18 @@
+# General free HTTP/SOCKS5 proxy sources, one URL per line. Lines starting with # are comments.
+# Kept separate from subscriptions.txt (overseas providers): these are public proxy IP lists used
+# directly by requests, without going through mihomo for protocol conversion. Exits are spread
+# worldwide; after fetching, cn_validate measures the exit country and classifies them.
+#
+# Format compatibility: protocol://ip:port and bare ip:port (the latter defaults to http).
+# Prefer jsDelivr CDN mirrors to get around TLS interference with raw.githubusercontent.
+
+# --- Aggregated lists (auto-updated daily/hourly, machine-readable, largest volume) ---
+https://cdn.jsdelivr.net/gh/monosans/proxy-list@main/proxies/http.txt
+https://cdn.jsdelivr.net/gh/monosans/proxy-list@main/proxies/socks5.txt
+https://cdn.jsdelivr.net/gh/TheSpeedX/PROXY-List@master/http.txt
+https://cdn.jsdelivr.net/gh/TheSpeedX/PROXY-List@master/socks5.txt
+https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/http/data.txt
+https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/protocols/socks5/data.txt
+https://cdn.jsdelivr.net/gh/clarketm/proxy-list@master/proxy-list-raw.txt
+https://cdn.jsdelivr.net/gh/roosterkid/openproxylist@main/HTTPS_RAW.txt
+https://cdn.jsdelivr.net/gh/roosterkid/openproxylist@main/SOCKS5_RAW.txt

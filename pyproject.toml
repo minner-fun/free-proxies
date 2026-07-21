@@ -1,0 +1,10 @@
+[project]
+name = "free-proxies"
+version = "0.1.0"
+description = "Collect and validate free provider nodes, turning them into a local proxy pool usable from requests"
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32",
+    "pyyaml>=6.0",
+    "pysocks>=1.7",
+]

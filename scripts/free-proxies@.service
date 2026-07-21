@@ -1,0 +1,37 @@
+# systemd template unit: free proxy long-running service (scheduled refresh + health check), instantiated per region.
+#
+# %i is the region after the @: overseas (provider line, 7890) or cn (general HTTP/SOCKS5 line, 7891).
+#
+# Deployment (assuming the code lives in /opt/free-proxies and scripts/setup.sh has been run):
+#   sudo cp scripts/free-proxies@.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now free-proxies@overseas    # provider line -> 127.0.0.1:7890
+#   sudo systemctl enable --now free-proxies@cn          # general line -> 127.0.0.1:7891
+#   journalctl -u free-proxies@cn -f                     # tail the logs of one line
+#
+# If you only need one line, only enable that one. The two lines run as separate processes,
+# with separate ports and separate workdirs, and do not affect each other.
+# Adjust /opt/free-proxies and the uv path in WorkingDirectory / ExecStart to match your setup
+# (check with `which uv`; for root deployments it is commonly /root/.local/bin/uv).
+
+[Unit]
+Description=free-proxies (%i): free proxy pool (auto refresh + health check)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/free-proxies
+ExecStart=/root/.local/bin/uv run python -m free_proxies serve --region %i
+Restart=always
+RestartSec=10
+# Small 2c2g machines: cap memory so an OOM cannot take down the whole box. This limit is
+# PER LINE, so running both lines means 600M x 2 = 1200M total. If the box runs anything else
+# (a web server and docker can easily take ~700M), 1200M per line would exhaust a 2G box.
+# Measured steady state is 60-240M per line, so 600M leaves plenty of headroom.
+# Raise it on a dedicated machine.
+MemoryMax=600M
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
